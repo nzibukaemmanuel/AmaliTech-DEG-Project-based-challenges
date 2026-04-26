@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import TreeBranch from "./TreeBranch";
+import SortControl from "./SortControl";
 
 export default function Sidebar({
   displayData,
@@ -10,7 +11,10 @@ export default function Sidebar({
   onSearchChange,
   onToggle,
   onSelect,
+  onFolderClick,
   totalFiles,
+  rootSort,
+  onRootSortChange,
 }) {
   const treeRef = useRef(null);
 
@@ -18,7 +22,10 @@ export default function Sidebar({
     <aside className="sidebar">
       <div className="sidebar-header">
         <span className="sidebar-label">File Explorer</span>
-        <span className="sidebar-count">{totalFiles} files</span>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <SortControl direction={rootSort} onDirectionChange={onRootSortChange} />
+          <span className="sidebar-count">{totalFiles}</span>
+        </div>
       </div>
       <div className="search-wrap">
         <div className="search-inner">
@@ -47,6 +54,7 @@ export default function Sidebar({
             focused={focused}
             onToggle={onToggle}
             onSelect={onSelect}
+            onFolderClick={onFolderClick}
             searchQuery={searchQuery}
           />
         )}

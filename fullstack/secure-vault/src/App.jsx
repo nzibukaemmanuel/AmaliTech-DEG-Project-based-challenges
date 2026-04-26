@@ -14,6 +14,7 @@ const [focused, setFocused] = useState(null);
 const [searchQuery, setSearchQuery] = useState("");
 const [toast, setToast] = useState({ msg: "", show: false });
 const [activeFolder, setActiveFolder] = useState(null);
+const [rootSort, setRootSort] = useState("asc");
 const treeRef = useRef(null);
 
 const showToast = useCallback((msg) => {
@@ -23,6 +24,14 @@ const showToast = useCallback((msg) => {
 
 const displayData = useMemo(() => filterTree(DATA, searchQuery), [searchQuery]);
 
+const sortedDisplayData = useMemo(() => {
+  const items = [...displayData];
+  items.sort((a, b) =>
+    rootSort === "asc" ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name)
+  );
+  return items;
+}, [displayData, rootSort]);
+
 const autoExpanded = useMemo(() => {
   if (!searchQuery) return expanded;
   return new Set([...expanded, ...collectIds(displayData)]);
@@ -31,8 +40,8 @@ const autoExpanded = useMemo(() => {
 const effectiveExpanded = searchQuery ? autoExpanded : expanded;
 
 const flatList = useMemo(
-  () => flattenVisible(displayData, effectiveExpanded),
-  [displayData, effectiveExpanded],
+  () => flattenVisible(sortedDisplayData, effectiveExpanded),
+  [sortedDisplayData, effectiveExpanded],
 );
 
 const handleToggle = useCallback((id) => {
@@ -151,7 +160,7 @@ return (
     >
       <Topbar onSync={() => showToast("Sync complete")} />
       <Sidebar
-        displayData={displayData}
+        displayData={sortedDisplayData}
         effectiveExpanded={effectiveExpanded}
         selected={selected}
         focused={focused}
@@ -159,7 +168,10 @@ return (
         onSearchChange={setSearchQuery}
         onToggle={handleToggle}
         onSelect={handleSelect}
+        onFolderClick={handleFolderClick}
         totalFiles={totalFiles}
+        rootSort={rootSort}
+        onRootSortChange={setRootSort}
       />
       <MainPanel
         selectedNode={selectedNode}

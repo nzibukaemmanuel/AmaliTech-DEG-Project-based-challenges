@@ -244,6 +244,39 @@ body { background: var(--bg); color: var(--text); font-family: var(--mono); }
   margin-bottom: 10px;
 }
 
+.folder-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+/* SORT CONTROL */
+.sort-ctrl { display: flex; align-items: center; gap: 6px; }
+
+.sort-dir-btn {
+  display: flex; align-items: center; gap: 4px;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--radius); color: var(--text-muted);
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.05em;
+  padding: 3px 8px; cursor: pointer;
+  transition: border-color 0.15s, color 0.15s; white-space: nowrap;
+}
+.sort-dir-btn:hover { border-color: var(--border-bright); color: var(--accent); }
+.sort-dir-icon { font-size: 11px; }
+.sort-dir-arrow { font-size: 11px; color: var(--accent); }
+
+.sort-pills { display: flex; gap: 2px; }
+.sort-pill {
+  background: none; border: 1px solid var(--border);
+  border-radius: 3px; color: var(--text-dim);
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.05em;
+  padding: 3px 7px; cursor: pointer;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+.sort-pill:hover { border-color: var(--border-bright); color: var(--text-muted); }
+.sort-pill.active { background: var(--accent-dim); border-color: var(--border-bright); color: var(--accent); }
+
 .grid-view {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));

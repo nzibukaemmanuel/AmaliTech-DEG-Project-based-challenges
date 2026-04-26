@@ -1,6 +1,18 @@
+import { useState, useMemo } from "react";
 import { getFileIcon, getExt } from "../utils.jsx";
+import SortControl from "./SortControl";
 
 export default function MainPanel({ selectedNode, selectedMeta, activeFolder, folderContents, selected, onSelect, onFolderClick }) {
+  const [sortDir, setSortDir] = useState("asc");
+
+  const sortedContents = useMemo(() => {
+    const items = [...folderContents];
+    items.sort((a, b) =>
+      sortDir === "asc" ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name)
+    );
+    return items;
+  }, [folderContents, sortDir]);
+
   return (
     <main className="main">
       <div className="breadcrumb">
@@ -25,9 +37,12 @@ export default function MainPanel({ selectedNode, selectedMeta, activeFolder, fo
         <div className="main-content">
           {activeFolder && folderContents.length > 0 && (
             <>
-              <div className="section-label">Folder contents</div>
+              <div className="folder-bar">
+                <span className="section-label" style={{ margin: 0 }}>Folder contents</span>
+                <SortControl direction={sortDir} onDirectionChange={setSortDir} />
+              </div>
               <div className="grid-view">
-                {folderContents.map(item => {
+                {sortedContents.map(item => {
                   const fi = item.type === "file" ? getFileIcon(item.name) : null;
                   return (
                     <div

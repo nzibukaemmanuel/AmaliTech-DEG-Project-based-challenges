@@ -1,6 +1,6 @@
 import TreeNode from "./TreeNode";
 
-export default function TreeBranch({ nodes, expanded, selected, focused, onToggle, onSelect, searchQuery, depth = 0 }) {
+export default function TreeBranch({ nodes, expanded, selected, focused, onToggle, onSelect, onFolderClick, searchQuery, depth = 0 }) {
   return (
     <>
       {nodes.map(node => (
@@ -13,6 +13,7 @@ export default function TreeBranch({ nodes, expanded, selected, focused, onToggl
             focused={focused}
             onToggle={onToggle}
             onSelect={onSelect}
+            onFolderClick={onFolderClick}
             searchQuery={searchQuery}
           />
           {node.type === "folder" && expanded.has(node.id) && node.children?.length > 0 && (
@@ -24,6 +25,7 @@ export default function TreeBranch({ nodes, expanded, selected, focused, onToggl
               focused={focused}
               onToggle={onToggle}
               onSelect={onSelect}
+              onFolderClick={onFolderClick}
               searchQuery={searchQuery}
             />
           )}

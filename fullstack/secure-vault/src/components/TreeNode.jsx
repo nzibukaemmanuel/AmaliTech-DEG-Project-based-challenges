@@ -2,7 +2,7 @@ import FolderIcon from "./FolderIcon";
 import ChevronIcon from "./ChevronIcon";
 import { getFileIcon, highlightText } from "../utils.jsx";
 
-export default function TreeNode({ node, depth, expanded, selected, focused, onToggle, onSelect, searchQuery }) {
+export default function TreeNode({ node, depth, expanded, selected, focused, onToggle, onSelect, onFolderClick, searchQuery }) {
   const isFolder = node.type === "folder";
   const isOpen = expanded.has(node.id);
   const isSelected = selected === node.id;
@@ -18,9 +18,9 @@ export default function TreeNode({ node, depth, expanded, selected, focused, onT
       data-id={node.id}
       className={`tree-node${isSelected ? " selected" : ""}${isFocused ? " focused" : ""}`}
       style={{ paddingLeft: depth * 12 + 4, paddingRight: 8 }}
-      onClick={() => (isFolder ? onToggle(node.id) : onSelect(node))}
+      onClick={() => (isFolder ? onFolderClick(node.id) : onSelect(node))}
       onKeyDown={e => {
-        if (e.key === "Enter") isFolder ? onToggle(node.id) : onSelect(node);
+        if (e.key === "Enter") isFolder ? onFolderClick(node.id) : onSelect(node);
       }}
     >
       {isFolder ? (
