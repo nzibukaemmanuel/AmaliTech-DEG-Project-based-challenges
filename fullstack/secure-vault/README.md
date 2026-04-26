@@ -1,123 +1,114 @@
-# SecureVault-Dashboard
+# SecureVault Dashboard
 
-This challenge is designed to test your ability to bridge Computer Science fundamentals with Modern Frontend Engineering.
+A high-performance file explorer UI built for enterprise cloud storage. Designed with a dark "cyber-secure" aesthetic for law firms and banks that need to navigate deeply nested document structures with speed and precision.
 
-## 1. Business Scenario & Context
-
-**Client:** SecureVault Inc.
-**Industry:** Enterprise Cloud Security
-
-**The Problem:** SecureVault offers high-security cloud storage for law firms and banks. Their backend engineers have built a robust API that returns folder structures efficiently. However, their current frontend is a simple list that is hard to navigate. Clients are complaining that they can't manage nested files easily.
-
-**Your Role:** You are the incoming Junior Frontend Engineer. Your task is to design and build a modern, high-performance "File Explorer" UI that impresses the CTO and the Design Lead.
+**Live Demo:** `[placeholder — add deployment link]`
+**Design File:** `[Secure vault Figma](https://www.figma.com/design/Aw4fpNZbREMeAwwmvYC2OH/Secure-vault?node-id=0-1&t=yeYWJNnbbzbcB5ax-1)`
 
 ---
 
-## 2. The Assignment Stages
+## Tech Stack
 
-This is a **hybrid design/engineering challenge**. You are expected to demonstrate competence in both visual design logic and algorithmic frontend implementation.
-
-### Phase 1: The Design System
-
-**Before writing code, you must design the interface.**
-
-- **Deliverable:** A link to a design file (Figma, Penpot, or Sketch) or a PDF export of your design frames.
-- **Requirement:** Your design file must include a dedicated **"Design System" page** that defines:
-  - **Typography Scale**
-  - **Color Palette**
-  - **Spacing Grid**
-  - **Component States**
-- **Brand Guidelines:** SecureVault wants a "Dark Mode" aesthetic that feels "cyber-secure, precise, and fast."
-
-### Phase 2: The Implementation
-
-**Build the application using the design system you created in Phase 1.**
-
-- **Constraint:** You **cannot** use component libraries like Bootstrap, Material UI, Chakra UI, or Ant Design. You must build your components from scratch to prove you understand CSS layout and component abstraction.
-- **Note:** CSS frameworks like Tailwind are allowed _only_ if you use them to build your own reusable component architecture.
+- **React 19** — component architecture and state management
+- **Vite** — development server and build tooling
+- **Custom CSS** — no component libraries; all UI built from scratch
 
 ---
 
-## 3. User Stories & Acceptance Criteria
+## Setup
 
-### Core Features (Required)
+```bash
+# Clone the repository
+git clone <repo-url>
+cd fullstack/secure-vault
 
-#### Story 1: The Recursive Tree
+# Install dependencies
+npm install
 
-> "As a lawyer with 10 years of case files, I need to navigate deeply nested folders without reloading the page."
+# Start the development server
+npm start
+```
 
-- **AC 1:** The UI renders the folder structure from the provided JSON.
-- **AC 2:** The component structure must be **recursive**. It should handle 2 levels of depth or 20 levels without breaking the UI.
-- **AC 3:** Folders must expand/collapse on click.
-
-#### Story 2: File Details & Inspection
-
-> "As a user, I need to see file metadata to ensure I'm opening the right version."
-
-- **AC 1:** Clicking a file "selects" it (distinct visual state based on your design).
-- **AC 2:** A "Properties Panel" displays the selected file's Name, Type, and Size.
-
-#### Story 3: Keyboard Accessibility
-
-> "As a power user, I hate reaching for my mouse. I want to navigate the vault using only my keyboard."
-
-- **AC 1:** `Up/Down` arrows move focus between the visible items in the explorer.
-- **AC 2:** `Right` arrow expands a folder; `Left` arrow collapses it.
-- **AC 3:** `Enter` selects the file.
-
-### The "Wildcard" Feature (Required)
-
-#### Story 4: The Innovation Clause
-
-> "As a developer, I want to add one feature that the client didn't ask for, but would significantly improve the user experience."
-
-- **Task:** Identify a gap in the requirements. What is missing?
-- **AC 1:** Implement **one** additional feature of your choice.
-- **AC 2:** In your README, explain _why_ you chose this feature and how it adds value to the business.
-
-### Bonus Feature (Optional)
-
-#### Story 5: Search & Filter
-
-- **AC 1:** A search bar filters the view. Matching items deep inside folders should force those folders to expand automatically.
+The app runs on `http://localhost:5173` by default.
 
 ---
 
-## 4. Technical Requirements
+## Features
 
-- **Data:** Use the `data.json` file provided in this repo. Do not edit the JSON structure, but you may add more items to test performance.
-- **Tech Stack:** React, Vue, Svelte, or Vanilla JS.
-- **Documentation:** Your README in the submission must include:
-  1.  Setup instructions.
-  2.  Link to your Design File.
-  3.  Explanation of your **Recursive Strategy** (how you managed the data structure).
-  4.  Explanation of your **Wildcard Feature**.
+### Recursive File Tree
+Folders expand and collapse on click. The tree handles arbitrary nesting depth — the same `TreeBranch` component renders itself recursively for each level of children, so 2 levels and 20 levels work identically.
+
+### File Properties Panel
+Selecting a file opens a properties panel that slides in from the right and occupies 50% of the screen. It displays the file's **Name**, **Type**, and **Size** directly from the data source — no mock or derived fields. Deselecting a file collapses the panel and the tree returns to full width.
+
+### Keyboard Navigation
+Full keyboard support for power users:
+
+| Key | Action |
+|-----|--------|
+| `↑` / `↓` | Move focus between visible items |
+| `→` | Expand focused folder |
+| `←` | Collapse focused folder |
+| `Enter` | Select focused file |
+
+### Search & Filter
+The search bar filters the tree in real time. Folders that contain matching items are automatically expanded so results are never hidden inside collapsed nodes.
+
+### URL State Persistence
+Application state is encoded in the URL query string. Refreshing the page or sharing a link restores the exact view — including active search, sort direction, and selected file. The tree also pre-expands ancestor folders so the selected file is immediately visible.
+
+```
+?q=Discovery     — active search query
+?sort=desc       — sort direction (omitted when ascending, the default)
+?file=email_1    — selected file ID
+```
 
 ---
 
-## 5. Submission Instructions
+## Wildcard Feature — Sort
 
-1.  **Fork** this repository.
-2.  Complete the code in your fork.
-3.  **Update the README:**
-    - **Delete** all the instructions in this file (the text you are reading now).
-    - **Replace** them with your own documentation as outlined in Section 4.
-    - _Note: Do not append your docs to the end. The final README should look like a professional project documentation, not a homework assignment._
-4.  Submit your repo link via the [online](https://forms.cloud.microsoft/e/PrfSgKKQ0k) form.
+**What it does:** A sort toggle button (`⇅ Sort ↑ / ↓`) in the sidebar toolbar lets users switch between ascending and descending alphabetical order for the file tree. The sort direction is persisted in the URL so it survives a page refresh.
+
+**Why it adds value:** Enterprise vaults accumulate hundreds of documents across deeply nested folders. Alphabetical sorting is how lawyers and analysts mentally index their files — being able to flip the order (e.g., newest-named files to the top when files are date-prefixed) lets them locate documents without scrolling through the entire tree. It is a zero-learning-curve feature that directly reduces time-to-file.
 
 ---
 
-### ⚠️ CRITICAL: Pre-Submission Checklist
+## Recursive Strategy
 
-**STOP and review your work.** To be eligible for the Solution Defense interview, your submission **MUST** pass the following "Gatekeeper" checks.
+The data structure is a tree of nodes where each node is either a `file` (leaf) or a `folder` (branch with a `children` array). The rendering strategy mirrors this shape directly:
 
-If any of the following are incorrect, your submission will be flagged as incomplete and you will **NOT** be invited for an interview.
+- **`TreeBranch`** receives an array of nodes and maps over them, rendering a `TreeNode` for each.
+- For every `folder` node that is expanded, `TreeBranch` renders another `TreeBranch` with `node.children` — the recursion.
+- Depth is tracked via a `depth` prop and used only for visual indentation (`paddingLeft: depth * 12px`).
 
-1.  **Public Repository:** Is your GitHub repository set to **Public**? (Private links will be auto-rejected).
-2.  **Audit-Ready History:** Does your Git commit history show your progress over time? (Repositories with a single "Initial Commit" or "Upload files" containing the entire project will be **rejected as unverifiable**).
-3.  **Working Deployment:** Have you tested your live link in an **Incognito/Private** window to ensure it loads without errors?
-4.  **No Restricted Libraries:** Did you build your own components? (Submissions using **Bootstrap, Material UI, or Chakra UI** will be disqualified).
-5.  **Design File Access:** Is your Figma/Penpot link included and set to **"Anyone with the link can view"**?
-6.  **Documentation:** Have you deleted the original assignment text from the `README.md` and replaced it with your own project documentation?
+```
+TreeBranch(nodes)
+  └─ TreeNode(node)          ← renders one item (folder or file)
+       └─ TreeBranch(children)   ← recurses if folder is expanded
+            └─ TreeNode(node)
+                 └─ ...
+```
 
-> **By submitting your work, you acknowledge that failure to meet these criteria effectively ends your application process.**
+This means no special-casing for depth: adding a 10th nesting level requires no code change. The `flattenVisible` utility traverses the same tree to produce the flat keyboard-navigation list, applying the same recursive pattern.
+
+---
+
+## Project Structure
+
+```
+src/
+├── components/
+│   ├── Topbar.jsx          — app header
+│   ├── Sidebar.jsx         — search, sort, and tree host
+│   ├── TreeBranch.jsx      — recursive branch renderer
+│   ├── TreeNode.jsx        — single tree item (folder or file)
+│   ├── ChevronIcon.jsx     — animated expand/collapse indicator
+│   ├── FolderIcon.jsx      — folder icon
+│   ├── PropertiesPanel.jsx — file detail panel
+│   └── SortControl.jsx     — reusable sort direction toggle
+├── utils.jsx               — tree traversal, search filter, flat list
+├── styles.css              — design system and all component styles
+├── App.jsx                 — state management and layout
+└── main.jsx                — entry point
+data.json                   — vault file structure
+```

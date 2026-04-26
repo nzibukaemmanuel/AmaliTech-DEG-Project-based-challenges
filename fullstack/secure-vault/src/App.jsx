@@ -1,26 +1,52 @@
 import { useState, useCallback, useRef, useEffect, useMemo } from "react";
 import DATA from "../data.json";
-import { flattenVisible, filterTree, collectIds, ensureMeta } from "./utils.jsx";
+import { flattenVisible, filterTree, collectIds } from "./utils.jsx";
 import Topbar from "./components/Topbar";
 import Sidebar from "./components/Sidebar";
-import MainPanel from "./components/MainPanel";
 import PropertiesPanel from "./components/PropertiesPanel";
 
+function getAncestorIds(nodes, targetId, path = []) {
+  for (const n of nodes) {
+    if (n.id === targetId) return path;
+    if (n.children) {
+      const found = getAncestorIds(n.children, targetId, [...path, n.id]);
+      if (found) return found;
+    }
+  }
+  return null;
+}
+
 export default function App() {
- 
-const [expanded, setExpanded] = useState(new Set(["root_1", "leg_1"]));
-const [selected, setSelected] = useState(null);
+
+const [expanded, setExpanded] = useState(() => {
+  const base = new Set(["root_1", "leg_1"]);
+  const fileId = new URLSearchParams(window.location.search).get("file");
+  if (fileId) {
+    const ancestors = getAncestorIds(DATA, fileId);
+    if (ancestors) ancestors.forEach(id => base.add(id));
+  }
+  return base;
+});
+const [selected, setSelected] = useState(() => new URLSearchParams(window.location.search).get("file"));
 const [focused, setFocused] = useState(null);
-const [searchQuery, setSearchQuery] = useState("");
+const [searchQuery, setSearchQuery] = useState(() => new URLSearchParams(window.location.search).get("q") ?? "");
 const [toast, setToast] = useState({ msg: "", show: false });
-const [activeFolder, setActiveFolder] = useState(null);
-const [rootSort, setRootSort] = useState("asc");
+const [rootSort, setRootSort] = useState(() => new URLSearchParams(window.location.search).get("sort") ?? "asc");
 const treeRef = useRef(null);
 
 const showToast = useCallback((msg) => {
   setToast({ msg, show: true });
   setTimeout(() => setToast((t) => ({ ...t, show: false })), 2000);
 }, []);
+
+useEffect(() => {
+  const params = new URLSearchParams();
+  if (searchQuery) params.set("q", searchQuery);
+  if (rootSort !== "asc") params.set("sort", rootSort);
+  if (selected) params.set("file", selected);
+  const qs = params.toString();
+  window.history.replaceState(null, "", qs ? `?${qs}` : window.location.pathname);
+}, [searchQuery, rootSort, selected]);
 
 const displayData = useMemo(() => filterTree(DATA, searchQuery), [searchQuery]);
 
@@ -57,14 +83,6 @@ const handleSelect = useCallback((node) => {
   setSelected(node.id);
   setFocused(node.id);
 }, []);
-
-const handleFolderClick = useCallback(
-  (id) => {
-    setActiveFolder((prev) => (prev === id ? null : id));
-    handleToggle(id);
-  },
-  [handleToggle],
-);
 
 const handleKeyDown = useCallback(
   (e) => {
@@ -120,23 +138,6 @@ const selectedNode = useMemo(() => {
   return selected ? find(DATA) : null;
 }, [selected]);
 
-const selectedMeta = selectedNode ? ensureMeta(selectedNode.id) : null;
-
-const folderContents = useMemo(() => {
-  function find(nodes, id) {
-    for (const n of nodes) {
-      if (n.id === id) return n;
-      if (n.children) {
-        const r = find(n.children, id);
-        if (r) return r;
-      }
-    }
-    return null;
-  }
-  const node = activeFolder ? find(DATA, activeFolder) : null;
-  return node?.children || [];
-}, [activeFolder]);
-
 const totalFiles = useMemo(() => {
   let c = 0;
   function count(nodes) {
@@ -148,6 +149,8 @@ const totalFiles = useMemo(() => {
   return c;
 }, []);
 
+const hasFile = selectedNode?.type === "file";
+
 return (
   <>
     <div className="scanline-overlay" />
@@ -156,9 +159,9 @@ return (
       className="app"
       onKeyDown={handleKeyDown}
       tabIndex={-1}
-      style={{ outline: "none" }}
+      style={{ outline: "none", gridTemplateColumns: hasFile ? "1fr 1fr" : "1fr" }}
     >
-      <Topbar onSync={() => showToast("Sync complete")} />
+      <Topbar />
       <Sidebar
         displayData={sortedDisplayData}
         effectiveExpanded={effectiveExpanded}
@@ -168,33 +171,16 @@ return (
         onSearchChange={setSearchQuery}
         onToggle={handleToggle}
         onSelect={handleSelect}
-        onFolderClick={handleFolderClick}
+        onFolderClick={handleToggle}
         totalFiles={totalFiles}
         rootSort={rootSort}
         onRootSortChange={setRootSort}
       />
-      <MainPanel
-        selectedNode={selectedNode}
-        selectedMeta={selectedMeta}
-        activeFolder={activeFolder}
-        folderContents={folderContents}
-        selected={selected}
-        onSelect={handleSelect}
-        onFolderClick={handleFolderClick}
-      />
-      <PropertiesPanel
-        selectedNode={selectedNode}
-        selectedMeta={selectedMeta}
-        onDownload={() => showToast(`Downloading ${selectedNode?.name}...`)}
-        onCopyLink={() => {
-          navigator.clipboard?.writeText(selectedNode?.id);
-          showToast("Link copied");
-        }}
-        onDelete={() => showToast("Access denied — read only")}
-      />
+      {hasFile && (
+        <PropertiesPanel selectedNode={selectedNode} />
+      )}
     </div>
   </>
 );
-
 
 }

@@ -1,6 +1,6 @@
 import { getFileIcon, getExt } from "../utils.jsx";
 
-export default function PropertiesPanel({ selectedNode, selectedMeta, onDownload, onCopyLink, onDelete }) {
+export default function PropertiesPanel({ selectedNode }) {
   return (
     <aside className="panel">
       <div className="panel-header">
@@ -33,37 +33,23 @@ export default function PropertiesPanel({ selectedNode, selectedMeta, onDownload
               );
             })()}
             <div className="prop-name">{selectedNode.name}</div>
-            <div className="prop-type">{getExt(selectedNode.name).toUpperCase()} Document</div>
             <div className="prop-divider" />
-            <div className="prop-row"><span className="prop-key">Name</span><span className="prop-val">{selectedNode.name}</span></div>
-            <div className="prop-row"><span className="prop-key">Type</span><span className="prop-val accent">{getExt(selectedNode.name).toUpperCase()}</span></div>
-            <div className="prop-row"><span className="prop-key">Size</span><span className="prop-val">{selectedNode.size}</span></div>
-            <div className="prop-row"><span className="prop-key">Modified</span><span className="prop-val">{selectedMeta?.modified}</span></div>
-            <div className="prop-row"><span className="prop-key">Owner</span><span className="prop-val">{selectedMeta?.owner}</span></div>
-            <div className="prop-divider" />
-            <div className="prop-row"><span className="prop-key">Encryption</span><span className="prop-val accent">AES-256</span></div>
             <div className="prop-row">
-              <span className="prop-key">Checksum</span>
-              <span className="prop-val" style={{ fontSize: 10, fontFamily: "var(--mono)" }}>SHA-256</span>
+              <span className="prop-key">Name</span>
+              <span className="prop-val">{selectedNode.name}</span>
             </div>
-            <div className="prop-row"><span className="prop-key">Access</span><span className="prop-val">Restricted</span></div>
+            <div className="prop-row">
+              <span className="prop-key">Type</span>
+              <span className="prop-val accent">{getExt(selectedNode.name).toUpperCase()}</span>
+            </div>
+            <div className="prop-row">
+              <span className="prop-key">Size</span>
+              <span className="prop-val">{selectedNode.size}</span>
+            </div>
           </>
         )}
       </div>
 
-      {selectedNode && (
-        <div className="panel-actions">
-          <button className="action-btn" onClick={onDownload}>
-            <span className="action-btn-icon">↓</span> Download
-          </button>
-          <button className="action-btn" onClick={onCopyLink}>
-            <span className="action-btn-icon">⎘</span> Copy Link
-          </button>
-          <button className="action-btn danger" onClick={onDelete}>
-            <span className="action-btn-icon">⌫</span> Delete
-          </button>
-        </div>
-      )}
     </aside>
   );
 }

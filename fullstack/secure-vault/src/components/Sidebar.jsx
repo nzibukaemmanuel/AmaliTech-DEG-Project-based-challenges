@@ -22,13 +22,10 @@ export default function Sidebar({
     <aside className="sidebar">
       <div className="sidebar-header">
         <span className="sidebar-label">File Explorer</span>
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <SortControl direction={rootSort} onDirectionChange={onRootSortChange} />
-          <span className="sidebar-count">{totalFiles}</span>
-        </div>
+        <span className="sidebar-count">{totalFiles} Files</span>
       </div>
       <div className="search-wrap">
-        <div className="search-inner">
+        <div className="search-inner" style={{ flex: "0 0 90%" }}>
           <span className="search-icon">⌕</span>
           <input
             className="search-input"
@@ -40,6 +37,7 @@ export default function Sidebar({
             <button className="search-clear" onClick={() => onSearchChange("")}>✕</button>
           )}
         </div>
+        <SortControl direction={rootSort} onDirectionChange={onRootSortChange} />
       </div>
       <div className="tree-scroll" ref={treeRef} role="tree">
         {displayData.length === 0 ? (
