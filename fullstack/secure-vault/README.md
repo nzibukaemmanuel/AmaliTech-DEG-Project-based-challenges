@@ -2,8 +2,10 @@
 
 A high-performance file explorer UI built for enterprise cloud storage. Designed with a dark "cyber-secure" aesthetic for law firms and banks that need to navigate deeply nested document structures with speed and precision.
 
-**Live Demo:** `[placeholder — add deployment link]`
-**Design File:** `[Secure vault Figma](https://www.figma.com/design/Aw4fpNZbREMeAwwmvYC2OH/Secure-vault?node-id=0-1&t=yeYWJNnbbzbcB5ax-1)`
+| | |
+|---|---|
+| **Live Demo** | [_add deployment link_](#) |
+| **Design File** | [Secure Vault — Figma](https://www.figma.com/design/Aw4fpNZbREMeAwwmvYC2OH/Secure-vault?node-id=0-1&t=yeYWJNnbbzbcB5ax-1) |
 
 ---
 
