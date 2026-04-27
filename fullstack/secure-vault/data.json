@@ -55,7 +55,8 @@
         "type": "folder",
         "children": [
           { "id": "pay_feb", "name": "February_2025.xlsx", "type": "file", "size": "2.1MB" },
-          { "id": "pay_mar", "name": "March_2025_Projection.xlsx", "type": "file", "size": "1.8MB" }
+          { "id": "pay_mar", "name": "March_2025_Projection.xlsx", "type": "file", "size": "1.8MB" },
+          { "id": "pay_apr", "name": "April_2025_Plan.xlsx", "type": "file", "size": "2.3MB" }
         ]
       },
       { "id": "tax_doc", "name": "Tax_Compliance_Checklist.pdf", "type": "file", "size": "340KB" }

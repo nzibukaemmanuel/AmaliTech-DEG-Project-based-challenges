@@ -4,7 +4,7 @@ A high-performance file explorer UI built for enterprise cloud storage. Designed
 
 | | |
 |---|---|
-| **Live Demo** | [_add deployment link_](#) |
+| **Live Demo** | [Secure Vault_ Netlify](https://voluble-douhua-8ed86c.netlify.app/) |
 | **Design File** | [Secure Vault — Figma](https://www.figma.com/design/Aw4fpNZbREMeAwwmvYC2OH/Secure-vault?node-id=0-1&t=yeYWJNnbbzbcB5ax-1) |
 
 ---
